@@ -16,7 +16,8 @@ const MODE_FALLBACK_ORDER: SearchMode[] = [
   'quick',
   'adaptive',
   'image',
-  'video'
+  'video',
+  'music'
 ]
 const PROVIDER_LABELS: Record<string, string> = {
   openai: 'OpenAI',

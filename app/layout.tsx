@@ -9,13 +9,9 @@ import { hasSupabasePublicConfig } from '@/lib/supabase/keys'
 import { createClient } from '@/lib/supabase/server'
 import { cn } from '@/lib/utils'
 
-import { SidebarProvider } from '@/components/ui/sidebar'
 import { Toaster } from '@/components/ui/sonner'
 
-import AppSidebar from '@/components/app-sidebar'
-import ArtifactRoot from '@/components/artifact/artifact-root'
-import Header from '@/components/header'
-import { KeyboardShortcutHandler } from '@/components/keyboard-shortcut-handler'
+import { AppLayoutClient } from '@/components/app-layout-client'
 import { PostHogProvider } from '@/components/posthog-provider'
 import { ThemeProvider } from '@/components/theme-provider'
 
@@ -26,12 +22,11 @@ const fontSans = FontSans({
   variable: '--font-sans'
 })
 
-const title = 'Morphic'
-const description =
-  'A fully open-source AI-powered answer engine with a generative UI.'
+const title = 'VortexLogic'
+const description = 'A sleek AI answers and creative media generation engine.'
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://morphic.sh'),
+  metadataBase: new URL('https://vortexlogic.vercel.app'),
   title,
   description,
   openGraph: {
@@ -41,8 +36,7 @@ export const metadata: Metadata = {
   twitter: {
     title,
     description,
-    card: 'summary_large_image',
-    creator: '@miiura'
+    card: 'summary_large_image'
   }
 }
 
@@ -72,30 +66,18 @@ export default async function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={cn(
-          'fixed inset-0 flex flex-col font-sans antialiased overflow-hidden',
-          fontSans.variable
-        )}
-      >
+      <body className={cn('font-sans antialiased bg-background text-foreground', fontSans.variable)}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem
+          defaultTheme="dark"
+          forcedTheme="dark"
           disableTransitionOnChange
         >
           <PostHogProvider userId={user?.id ?? null}>
             <UserProvider hasUser={!!userId}>
-              <SidebarProvider defaultOpen={false}>
-                {userId && <AppSidebar />}
-                <KeyboardShortcutHandler />
-                <div className="flex flex-col flex-1 min-w-0">
-                  <Header user={user} />
-                  <main className="flex flex-1 min-h-0 min-w-0 overflow-hidden">
-                    <ArtifactRoot>{children}</ArtifactRoot>
-                  </main>
-                </div>
-              </SidebarProvider>
+              <AppLayoutClient userId={userId} user={user}>
+                {children}
+              </AppLayoutClient>
             </UserProvider>
           </PostHogProvider>
           <Toaster />

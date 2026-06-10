@@ -25,7 +25,7 @@ import {
 } from './ui/dropdown-menu'
 import { HoverCard, HoverCardContent, HoverCardTrigger } from './ui/hover-card'
 
-const VALID_SEARCH_MODES = new Set(['quick', 'adaptive', 'image', 'video'])
+const VALID_SEARCH_MODES = new Set(['quick', 'adaptive', 'image', 'video', 'music'])
 
 function getSearchModeSnapshot(): SearchMode {
   const savedMode = getCookie('searchMode')
@@ -162,10 +162,9 @@ export function SearchModeSelector({
         <div className="relative inline-flex items-center rounded-full bg-background border p-1">
           {/* Animated background indicator */}
           <div
-            className="absolute inset-1 rounded-full bg-muted transition-[transform,width] duration-[180ms] ease-[var(--motion-ease-in-out)]"
+            className="absolute left-1 top-1 bottom-1 w-8 h-8 rounded-full bg-muted transition-transform duration-[180ms] ease-[var(--motion-ease-in-out)]"
             style={{
-              width: `calc(${100 / modeCount}% - 4px)`,
-              transform: `translateX(${selectedIndex * 100}%)`
+              transform: `translateX(${selectedIndex * 32}px)`
             }}
           />
 
@@ -192,7 +191,7 @@ export function SearchModeSelector({
                       type="button"
                       onClick={() => handleModeSelect(config.value)}
                       className={cn(
-                        'relative z-10 flex-1 items-center justify-center rounded-full px-3 py-2 transition-colors duration-[140ms] ease-[var(--motion-ease-out)]',
+                        'relative z-10 flex items-center justify-center w-8 h-8 rounded-full transition-colors duration-[140ms] ease-[var(--motion-ease-out)]',
                         isSelected
                           ? 'text-foreground'
                           : 'text-muted-foreground hover:text-foreground/80'

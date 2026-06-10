@@ -1,619 +1,473 @@
-import { Metadata } from 'next'
+'use client'
+
+import React, { useState } from 'react'
 import Link from 'next/link'
 
-export const metadata: Metadata = {
-  title: 'VortexLogic - Premium AI Creative Video & Image Studio',
-  description:
-    'Create cinematic videos, 3D motion, and consistent characters with VortexLogic. The next-generation creative engine powered by state-of-the-art AI.'
-}
+import {
+  IconArrowRight as ArrowRight,
+  IconBolt as BoltIcon,
+  IconBrandGithub as GithubIcon,
+  IconChevronRight as ChevronRight,
+  IconCpu as CpuIcon,
+  IconDeviceLaptop as LaptopIcon,
+  IconLock as LockIcon,
+  IconMenu2 as MenuIcon,
+  IconPhoto as PhotoIcon,
+  IconSearch as SearchIcon,
+  IconSparkles as SparklesIcon,
+  IconVideo as VideoIcon,
+  IconX as CloseIcon} from '@tabler/icons-react'
+
+import { Button } from '@/components/ui/button'
+
+import { BookDemoModal } from '@/components/book-demo-modal'
 
 export default function LandingPage() {
-  return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 overflow-x-hidden font-sans select-none selection:bg-violet-500/30 selection:text-violet-200">
-      {/* Background Glows */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[600px] pointer-events-none opacity-30 blur-[130px] bg-gradient-to-r from-violet-600 via-indigo-600 to-cyan-500 rounded-full" />
-      <div className="absolute top-[800px] -left-40 w-96 h-96 pointer-events-none opacity-10 blur-[120px] bg-pink-500 rounded-full" />
-      <div className="absolute top-[1600px] -right-40 w-[500px] h-[500px] pointer-events-none opacity-10 blur-[150px] bg-indigo-500 rounded-full" />
+  const [demoOpen, setDemoOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
-      {/* Navigation Header */}
-      <header className="sticky top-0 z-50 w-full border-b border-slate-900/80 bg-slate-950/80 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+  const features = [
+    {
+      icon: SearchIcon,
+      title: 'Real-Time Answers',
+      description: 'Fetch, analyze, and present up-to-the-minute web information. Powered by Tavily, Brave, and SearXNG.'
+    },
+    {
+      icon: VideoIcon,
+      title: 'Cinematic AI Videos',
+      description: 'Generate stunning, high-definition 16:9 cinematic video loops directly from natural language prompts.'
+    },
+    {
+      icon: PhotoIcon,
+      title: 'Flux Image Generation',
+      description: 'Create hyper-realistic art and imagery with granular aspect ratios, styles, and seed parameters.'
+    },
+    {
+      icon: SparklesIcon,
+      title: 'Agentic Deep Research',
+      description: 'Deploy multi-turn planning agents to research complex subjects, synthesize documentation, and write reports.'
+    }
+  ]
+
+  const showcaseItems = [
+    {
+      type: 'video',
+      title: 'Cinematic Landscapes',
+      prompt: 'Cinematic drone shot of neon-lit Tokyo streets in heavy rain, cyberpunk style, slow motion, 8k resolution',
+      bgGradient: 'from-purple-900/40 via-neutral-900 to-black',
+      tag: 'AI Video',
+      icon: VideoIcon
+    },
+    {
+      type: 'image',
+      title: 'Surreal Portraiture',
+      prompt: 'A close-up photographic portrait of an astronaut exploring a bioluminescent forest, highly detailed, flux core',
+      bgGradient: 'from-emerald-900/40 via-neutral-900 to-black',
+      tag: 'Flux Image',
+      icon: PhotoIcon
+    }
+  ]
+
+  return (
+    <div className="flex flex-col min-h-screen w-full bg-neutral-950 text-white selection:bg-rose-500/30 selection:text-rose-200">
+      {/* Dynamic Ambient Background Glows */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[600px] pointer-events-none overflow-hidden z-0">
+        <div className="absolute top-[-10%] left-[10%] w-[50%] h-[50%] bg-radial from-rose-500/10 via-transparent to-transparent blur-3xl opacity-60" />
+        <div className="absolute top-[20%] left-[50%] w-[45%] h-[45%] bg-radial from-emerald-500/5 via-transparent to-transparent blur-3xl opacity-40" />
+      </div>
+
+      {/* Grid overlay */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808003_1px,transparent_1px),linear-gradient(to_bottom,#80808003_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none z-0" />
+
+      {/* FLOATING HEADER NAVBAR */}
+      <header className="sticky top-0 z-40 w-full border-b border-neutral-900 bg-neutral-950/70 backdrop-blur-md transition-all">
+        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-8">
-            <Link href="/" className="flex items-center gap-2 group">
-              <div className="relative w-8 h-8 rounded-lg bg-gradient-to-tr from-violet-600 to-indigo-600 flex items-center justify-center shadow-[0_0_15px_rgba(124,58,237,0.3)] group-hover:scale-105 transition-all duration-300">
-                <svg
-                  className="w-5 h-5 text-white"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2.5}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"
-                  />
-                </svg>
+            <Link href="/" className="flex items-center gap-2.5 group select-none">
+              <div className="w-6 h-6 rounded-lg bg-rose-500 flex items-center justify-center font-bold text-sm shadow-md shadow-rose-500/20 group-hover:scale-105 transition-transform duration-200">
+                V
               </div>
-              <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent group-hover:text-white transition-colors duration-300">
+              <span className="font-bold tracking-tight text-neutral-100 group-hover:text-white transition-colors">
                 VortexLogic
               </span>
             </Link>
 
-            <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-slate-400">
-              <Link
-                href="/studio"
-                className="hover:text-slate-100 transition-colors"
-              >
-                Studio
+            <nav className="hidden md:flex items-center gap-6">
+              <a href="#features" className="text-xs text-neutral-400 hover:text-neutral-200 transition-colors">
+                Features
+              </a>
+              <a href="#showcase" className="text-xs text-neutral-400 hover:text-neutral-200 transition-colors">
+                Showcase
+              </a>
+              <Link href="/studio" className="text-xs text-neutral-400 hover:text-neutral-200 transition-colors">
+                Creative Studio
               </Link>
-              <Link
-                href="/pricing"
-                className="hover:text-slate-100 transition-colors"
-              >
+              <Link href="/pricing" className="text-xs text-neutral-400 hover:text-neutral-200 transition-colors font-medium">
                 Pricing
-              </Link>
-              <Link
-                href="/search-engine"
-                className="hover:text-slate-100 transition-colors"
-              >
-                AI Search
               </Link>
             </nav>
           </div>
 
-          <div className="flex items-center gap-4">
-            <Link
-              href="/studio"
-              className="hidden sm:inline-flex text-sm font-semibold text-slate-300 hover:text-white transition-colors"
+          <div className="hidden md:flex items-center gap-3">
+            <button
+              onClick={() => setDemoOpen(true)}
+              className="px-3 py-1.5 rounded-lg border border-neutral-800 hover:border-neutral-700 hover:bg-neutral-900/50 text-xs text-neutral-300 font-semibold transition-all cursor-pointer"
             >
-              Sign In
+              Book a Demo
+            </button>
+            <Link
+              href="/auth/login"
+              className="px-3 py-1.5 text-xs text-neutral-400 hover:text-neutral-200 font-semibold transition-all"
+            >
+              Log in
             </Link>
             <Link
-              href="/studio"
-              className="inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-semibold text-white bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 transition-all duration-200 shadow-[0_4px_20px_rgba(124,58,237,0.25)] hover:shadow-[0_4px_25px_rgba(124,58,237,0.4)] active:scale-95"
+              href="/search-engine"
+              className="px-3.5 py-1.5 rounded-lg bg-rose-500 hover:bg-rose-600 text-xs text-white font-semibold shadow-xs transition-colors"
             >
-              Launch Studio
+              Start for Free
             </Link>
           </div>
+
+          {/* Mobile menu trigger */}
+          <div className="md:hidden">
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-1 rounded-lg border border-neutral-900 text-neutral-400 hover:text-white transition-colors"
+            >
+              {mobileMenuOpen ? <CloseIcon className="w-5 h-5" /> : <MenuIcon className="w-5 h-5" />}
+            </button>
+          </div>
         </div>
+
+        {/* Mobile menu drawer */}
+        {mobileMenuOpen && (
+          <div className="md:hidden w-full border-b border-neutral-900 bg-neutral-950 p-6 flex flex-col gap-4 animate-in slide-in-from-top-4 duration-200">
+            <nav className="flex flex-col gap-3">
+              <a
+                href="#features"
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-sm text-neutral-400 hover:text-white transition-colors py-1"
+              >
+                Features
+              </a>
+              <a
+                href="#showcase"
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-sm text-neutral-400 hover:text-white transition-colors py-1"
+              >
+                Showcase
+              </a>
+              <Link
+                href="/studio"
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-sm text-neutral-400 hover:text-white transition-colors py-1"
+              >
+                Creative Studio
+              </Link>
+              <Link
+                href="/pricing"
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-sm text-neutral-400 hover:text-white transition-colors py-1"
+              >
+                Pricing
+              </Link>
+            </nav>
+            <hr className="border-neutral-900" />
+            <div className="flex flex-col gap-2.5">
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false)
+                  setDemoOpen(true)
+                }}
+                className="w-full py-2 rounded-xl border border-neutral-800 hover:bg-neutral-900 text-xs text-center font-semibold transition-all cursor-pointer"
+              >
+                Book a Demo
+              </button>
+              <Link
+                href="/auth/login"
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full py-2 text-xs text-center text-neutral-400 hover:text-white font-semibold transition-all"
+              >
+                Log in
+              </Link>
+              <Link
+                href="/search-engine"
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full py-2 rounded-xl bg-rose-500 hover:bg-rose-600 text-xs text-center text-white font-semibold transition-colors"
+              >
+                Start for Free
+              </Link>
+            </div>
+          </div>
+        )}
       </header>
 
-      {/* Hero Section */}
-      <section className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-24 text-center">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-violet-500/20 bg-violet-500/5 text-xs font-semibold text-violet-300 mb-8 animate-fade-in shadow-[0_0_15px_rgba(124,58,237,0.05)]">
-          <span className="flex h-2 w-2 rounded-full bg-violet-400 animate-pulse" />
-          VortexLogic Studio v2.0 is now live
+      {/* HERO SECTION */}
+      <section className="relative w-full max-w-5xl mx-auto pt-20 md:pt-32 px-6 flex flex-col items-center text-center z-10 select-none">
+        {/* Announcement Badge */}
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-rose-500/30 bg-rose-500/5 text-rose-400 text-[10px] md:text-xs font-semibold uppercase tracking-wider mb-6">
+          <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
+          <span>VortexLogic v2.0 - Hyper-intelligent creative suite</span>
         </div>
 
-        <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-none mb-6">
-          <span className="block text-slate-100">Create Cinematic Videos</span>
-          <span className="block bg-gradient-to-r from-violet-400 via-indigo-300 to-cyan-400 bg-clip-text text-transparent mt-2">
-            with Next-Gen AI
+        {/* Hero Title */}
+        <h1 className="text-4xl md:text-7xl font-bold tracking-tight text-white leading-[1.1] mb-6 bg-clip-text text-transparent bg-linear-to-b from-neutral-50 via-neutral-100 to-neutral-500">
+          The Creative Engine <br />
+          <span className="text-transparent bg-clip-text bg-linear-to-r from-rose-400 via-rose-500 to-rose-600">
+            for Cinematic AI
           </span>
         </h1>
 
-        <p className="max-w-2xl mx-auto text-lg sm:text-xl text-slate-400 mb-10 leading-relaxed">
-          From simple text prompts and static images to high-fidelity
-          animations, character-consistent scenes, and professional 3D motion.
+        {/* Hero Description */}
+        <p className="text-xs md:text-base text-neutral-400 max-w-2xl mb-10 leading-relaxed font-normal">
+          Generate high-fidelity AI images, produce premium cinematic video loops, and run deep agentic web research inside a single, black-sleek flow state.
         </p>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-20">
+        {/* Call to Actions */}
+        <div className="flex flex-col sm:flex-row items-center gap-4 z-20">
           <Link
-            href="/studio"
-            className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 rounded-xl text-base font-semibold text-white bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 transition-all duration-200 shadow-[0_4px_30px_rgba(124,58,237,0.3)] hover:shadow-[0_4px_35px_rgba(124,58,237,0.45)] hover:-translate-y-0.5 active:scale-95"
+            href="/search-engine"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-rose-500 hover:bg-rose-600 text-sm font-semibold text-white shadow-lg shadow-rose-500/10 transition-all group cursor-pointer"
           >
-            Start Creating Free
-            <svg
-              className="w-5 h-5 ml-2"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M13 5l7 7-7 7M5 5l7 7-7 7"
-              />
-            </svg>
+            <span>Start Generating for Free</span>
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
           </Link>
-          <Link
-            href="/pricing"
-            className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 rounded-xl text-base font-semibold text-slate-300 hover:text-white border border-slate-800 hover:border-slate-700 bg-slate-900/40 hover:bg-slate-900/60 transition-all duration-200 hover:-translate-y-0.5"
+
+          <button
+            onClick={() => setDemoOpen(true)}
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl border border-neutral-800 hover:border-neutral-700 hover:bg-neutral-900/40 text-sm font-semibold text-neutral-300 transition-colors cursor-pointer"
           >
-            View Pricing
-          </Link>
+            <span>Book Interactive Demo</span>
+          </button>
         </div>
 
-        {/* Video / Studio Interface Showcase mockup */}
-        <div className="relative max-w-5xl mx-auto rounded-2xl border border-slate-800/80 bg-slate-950/40 p-4 shadow-[0_0_50px_rgba(0,0,0,0.8)] backdrop-blur-sm">
-          <div className="absolute inset-0 rounded-2xl bg-gradient-to-tr from-violet-500/10 via-transparent to-cyan-500/10 opacity-30 pointer-events-none" />
-          <div className="w-full aspect-[16/9] rounded-xl overflow-hidden bg-slate-900 border border-slate-800 relative group flex items-center justify-center">
-            {/* Mock Canvas with preview */}
-            <div
-              className="absolute inset-0 bg-cover bg-center filter brightness-75 group-hover:scale-[1.01] transition-transform duration-700"
-              style={{
-                backgroundImage:
-                  'url("https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1964&auto=format&fit=crop")'
-              }}
-            />
+        {/* Product Visual Mockup */}
+        <div className="w-full mt-20 rounded-2xl border border-neutral-900 bg-neutral-950/40 backdrop-blur-xs p-2.5 shadow-2xl relative">
+          {/* Glass header bar */}
+          <div className="w-full h-8 flex items-center justify-between px-3 border-b border-neutral-900/60 text-[10px] text-neutral-600 font-semibold mb-3">
+            <div className="flex gap-1.5">
+              <span className="w-2.5 h-2.5 rounded-full bg-neutral-900" />
+              <span className="w-2.5 h-2.5 rounded-full bg-neutral-900" />
+              <span className="w-2.5 h-2.5 rounded-full bg-neutral-900" />
+            </div>
+            <span>vortexlogic.vercel.app/search-engine</span>
+            <div className="w-10" />
+          </div>
 
-            {/* Mock Glass Overlay controls */}
-            <div className="absolute bottom-6 left-6 right-6 p-4 rounded-xl border border-white/10 bg-slate-950/40 backdrop-blur-md flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <button className="w-10 h-10 rounded-lg bg-violet-600 hover:bg-violet-500 flex items-center justify-center text-white transition-colors shadow-lg">
-                  <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
-                </button>
-                <div className="text-left">
-                  <p className="text-xs font-semibold text-white">
-                    Project: Cyberpunk City Cinematic
-                  </p>
-                  <p className="text-[10px] text-slate-400">
-                    Gen-4 Video Model • Active
-                  </p>
-                </div>
+          {/* Sandbox Body Visual */}
+          <div className="w-full aspect-[16/9] md:aspect-[2.35/1] bg-black/60 rounded-xl overflow-hidden flex flex-col justify-between p-6 text-left relative group">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(244,63,94,0.06),transparent)] pointer-events-none" />
+
+            <div className="flex justify-between items-start">
+              <div className="flex gap-2">
+                <span className="px-2 py-0.5 rounded-md border border-neutral-800 bg-neutral-900 text-[10px] text-neutral-400">
+                  Model: GPT-4o
+                </span>
+                <span className="px-2 py-0.5 rounded-md border border-neutral-800 bg-neutral-900 text-[10px] text-neutral-400 flex items-center gap-1">
+                  <VideoIcon className="w-3 h-3 text-rose-500" />
+                  Video Generation Enabled
+                </span>
+              </div>
+            </div>
+
+            {/* Simulated Chat Interface */}
+            <div className="max-w-md space-y-3 z-10">
+              <div className="text-[11px] text-neutral-500 font-mono">/prompt: video-gen</div>
+              <div className="text-xs md:text-sm font-semibold text-neutral-200">
+                &ldquo;An cinematic fly-over of a misty emerald mountain pass at sunrise, ultra high fidelity&rdquo;
               </div>
               <div className="flex items-center gap-2">
-                <span className="px-2.5 py-1 rounded bg-emerald-500/10 border border-emerald-500/20 text-[10px] font-bold text-emerald-400 uppercase tracking-wider">
-                  4K WebM
-                </span>
-                <span className="px-2.5 py-1 rounded bg-white/5 border border-white/10 text-[10px] font-bold text-slate-300">
-                  00:08s
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-[10px] text-emerald-400 font-semibold uppercase tracking-wider">
+                  Autonomous planning agent generating video loop...
                 </span>
               </div>
             </div>
 
-            {/* Futuristic play button in center */}
-            <div className="relative z-10 w-20 h-20 rounded-full border-2 border-white/20 bg-white/5 hover:bg-white/10 flex items-center justify-center text-white backdrop-blur-sm cursor-pointer hover:scale-105 active:scale-95 transition-all duration-300 group">
-              <svg
-                className="w-8 h-8 translate-x-0.5 fill-current"
-                viewBox="0 0 24 24"
-              >
-                <path d="M8 5v14l11-7z" />
-              </svg>
+            {/* Bottom Bar input field mock */}
+            <div className="w-full h-11 rounded-xl border border-neutral-800 bg-neutral-950/80 px-4 flex items-center justify-between text-xs text-neutral-500 mt-4">
+              <span>Ask VortexLogic anything or start research...</span>
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] border border-neutral-800 px-1.5 py-0.5 rounded-md font-mono bg-neutral-900">
+                  Ctrl + Enter
+                </span>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Feature Grid Section */}
-      <section className="border-t border-slate-900 bg-slate-950/40 py-24 relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
-              Everything you need for premium AI Video & Art
-            </h2>
-            <p className="text-slate-400 text-lg">
-              Unlock cutting-edge tools to bypass standard workflow bottlenecks
-              and output studio-quality cinematic visual assets.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* Feature 1 */}
-            <div className="p-6 rounded-2xl border border-slate-900 hover:border-slate-800 bg-slate-900/20 hover:bg-slate-900/40 transition-all duration-300 group">
-              <div className="w-12 h-12 rounded-xl bg-violet-600/10 border border-violet-500/20 flex items-center justify-center text-violet-400 mb-6 group-hover:scale-110 transition-transform duration-300">
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
-                  />
-                </svg>
-              </div>
-              <h3 className="text-lg font-bold mb-2 text-slate-100 group-hover:text-violet-300 transition-colors">
-                Frames-to-Video
-              </h3>
-              <p className="text-sm text-slate-400 leading-relaxed">
-                Convert still designs or AI images into realistic, fluid
-                animations. Simply upload your frame, define motion, and render.
-              </p>
-            </div>
-
-            {/* Feature 2 */}
-            <div className="p-6 rounded-2xl border border-slate-900 hover:border-slate-800 bg-slate-900/20 hover:bg-slate-900/40 transition-all duration-300 group">
-              <div className="w-12 h-12 rounded-xl bg-cyan-600/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 mb-6 group-hover:scale-110 transition-transform duration-300">
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"
-                  />
-                </svg>
-              </div>
-              <h3 className="text-lg font-bold mb-2 text-slate-100 group-hover:text-cyan-300 transition-colors">
-                3D Motion Camera
-              </h3>
-              <p className="text-sm text-slate-400 leading-relaxed">
-                Add cinematic camera tracks (pan, orbit, zoom, crane) to static
-                scenes. Fully configurable velocity and path mapping.
-              </p>
-            </div>
-
-            {/* Feature 3 */}
-            <div className="p-6 rounded-2xl border border-slate-900 hover:border-slate-800 bg-slate-900/20 hover:bg-slate-900/40 transition-all duration-300 group">
-              <div className="w-12 h-12 rounded-xl bg-indigo-600/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-6 group-hover:scale-110 transition-transform duration-300">
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
-                  />
-                </svg>
-              </div>
-              <h3 className="text-lg font-bold mb-2 text-slate-100 group-hover:text-indigo-300 transition-colors">
-                Character Consistency
-              </h3>
-              <p className="text-sm text-slate-400 leading-relaxed">
-                Tired of shape-shifting characters? Lock key features, clothing,
-                and styles across entire cinematic sequences.
-              </p>
-            </div>
-
-            {/* Feature 4 */}
-            <div className="p-6 rounded-2xl border border-slate-900 hover:border-slate-800 bg-slate-900/20 hover:bg-slate-900/40 transition-all duration-300 group">
-              <div className="w-12 h-12 rounded-xl bg-pink-600/10 border border-pink-500/20 flex items-center justify-center text-pink-400 mb-6 group-hover:scale-110 transition-transform duration-300">
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
-                  />
-                </svg>
-              </div>
-              <h3 className="text-lg font-bold mb-2 text-slate-100 group-hover:text-pink-300 transition-colors">
-                Live Canvas
-              </h3>
-              <p className="text-sm text-slate-400 leading-relaxed">
-                Work dynamically with your design team in a shared multiplayer
-                sandbox. Edit timelines and select presets in real-time.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing Preview Section */}
-      <section className="py-24 relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
-            Simple, transparent plans
+      {/* FEATURE GRID SECTION */}
+      <section id="features" className="w-full max-w-5xl mx-auto px-6 py-28 z-10 border-t border-neutral-900/60 mt-10">
+        <div className="text-center max-w-xl mx-auto mb-16">
+          <h2 className="text-2xl md:text-4xl font-bold tracking-tight text-white mb-4">
+            Unified Creativity Framework
           </h2>
-          <p className="text-slate-400 text-lg">
-            Choose a plan that fits your production pipeline. Start for free,
-            scale when you need.
+          <p className="text-xs md:text-sm text-neutral-400">
+            A state-of-the-art suite integrating advanced search models, vector workflows, and high-fidelity media pipelines.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          {/* Freemium Plan */}
-          <div className="rounded-2xl border border-slate-900 bg-slate-900/10 p-8 flex flex-col justify-between hover:border-slate-800 transition-colors duration-300">
-            <div>
-              <h3 className="text-lg font-bold text-slate-200 mb-2">Free</h3>
-              <p className="text-sm text-slate-400 mb-6">
-                For hobbyists and quick exploration.
-              </p>
-              <div className="flex items-baseline text-slate-100 mb-8">
-                <span className="text-4xl font-extrabold tracking-tight">
-                  $0
-                </span>
-                <span className="ml-1 text-sm font-semibold text-slate-500">
-                  /month
-                </span>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+          {features.map((feat, idx) => {
+            const Icon = feat.icon
+            return (
+              <div
+                key={idx}
+                className="group relative rounded-2xl border border-neutral-900 bg-neutral-950/20 backdrop-blur-md p-6 transition-all duration-300 hover:border-rose-500/20 hover:bg-neutral-900/[0.04]"
+              >
+                <div className="flex items-center gap-4 mb-3">
+                  <div className="p-2 rounded-xl bg-neutral-900 border border-neutral-850 text-neutral-400 group-hover:text-white group-hover:border-rose-500/30 transition-all">
+                    <Icon className="w-5 h-5 text-rose-400" />
+                  </div>
+                  <h3 className="font-semibold text-sm text-neutral-100">
+                    {feat.title}
+                  </h3>
+                </div>
+                <p className="text-xs text-neutral-400 leading-relaxed">
+                  {feat.description}
+                </p>
               </div>
-              <ul className="space-y-4 text-sm text-slate-300">
-                <li className="flex items-center gap-2.5">
-                  <svg
-                    className="w-4 h-4 text-violet-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={3}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                  10 free generation credits/mo
-                </li>
-                <li className="flex items-center gap-2.5">
-                  <svg
-                    className="w-4 h-4 text-violet-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={3}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                  Standard generation speed
-                </li>
-                <li className="flex items-center gap-2.5">
-                  <svg
-                    className="w-4 h-4 text-violet-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={3}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                  720p maximum resolution
-                </li>
-              </ul>
-            </div>
-            <Link
-              href="/studio"
-              className="mt-8 block w-full text-center px-4 py-2.5 rounded-lg text-sm font-semibold border border-slate-800 hover:border-slate-700 text-slate-200 hover:text-white bg-slate-950/50 hover:bg-slate-950 transition-colors"
-            >
-              Get Started
-            </Link>
-          </div>
+            )
+          })}
+        </div>
+      </section>
 
-          {/* Pro Plan */}
-          <div className="rounded-2xl border-2 border-violet-500 bg-slate-900/30 p-8 flex flex-col justify-between shadow-[0_0_30px_rgba(124,58,237,0.15)] relative scale-105">
-            <div className="absolute top-0 right-6 -translate-y-1/2 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider text-white bg-violet-600 shadow-md">
-              Most Popular
-            </div>
-            <div>
-              <h3 className="text-lg font-bold text-slate-100 mb-2">Pro</h3>
-              <p className="text-sm text-slate-400 mb-6">
-                For professional creators and agencies.
-              </p>
-              <div className="flex items-baseline text-slate-100 mb-8">
-                <span className="text-4xl font-extrabold tracking-tight">
-                  $200
-                </span>
-                <span className="ml-1 text-sm font-semibold text-slate-500">
-                  /month
-                </span>
-              </div>
-              <ul className="space-y-4 text-sm text-slate-200 font-medium">
-                <li className="flex items-center gap-2.5">
-                  <svg
-                    className="w-4 h-4 text-violet-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={3}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                  2000 fast-generation credits/mo
-                </li>
-                <li className="flex items-center gap-2.5">
-                  <svg
-                    className="w-4 h-4 text-violet-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={3}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                  Priority generation queue
-                </li>
-                <li className="flex items-center gap-2.5">
-                  <svg
-                    className="w-4 h-4 text-violet-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={3}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                  Cinematic 4K Resolution
-                </li>
-                <li className="flex items-center gap-2.5">
-                  <svg
-                    className="w-4 h-4 text-violet-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={3}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                  Advanced 3D camera controls
-                </li>
-              </ul>
-            </div>
-            <Link
-              href="/pricing"
-              className="mt-8 block w-full text-center px-4 py-3 rounded-lg text-sm font-semibold text-white bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 transition-colors shadow-lg shadow-violet-600/20"
-            >
-              Upgrade to Pro
-            </Link>
-          </div>
+      {/* SHOWCASE SECTION */}
+      <section id="showcase" className="w-full max-w-5xl mx-auto px-6 py-10 z-10">
+        <div className="text-center max-w-xl mx-auto mb-16">
+          <h2 className="text-2xl md:text-4xl font-bold tracking-tight text-white mb-4">
+            Next-Gen AI Output Showcase
+          </h2>
+          <p className="text-xs md:text-sm text-neutral-400">
+            Preview the quality generated natively by our custom integrated media APIs inside VortexLogic threads.
+          </p>
+        </div>
 
-          {/* Business Plan */}
-          <div className="rounded-2xl border border-slate-900 bg-slate-900/10 p-8 flex flex-col justify-between hover:border-slate-800 transition-colors duration-300">
-            <div>
-              <h3 className="text-lg font-bold text-slate-200 mb-2">
-                Business
-              </h3>
-              <p className="text-sm text-slate-400 mb-6">
-                For large scale enterprises & studios.
-              </p>
-              <div className="flex items-baseline text-slate-100 mb-8">
-                <span className="text-4xl font-extrabold tracking-tight">
-                  $500
-                </span>
-                <span className="ml-1 text-sm font-semibold text-slate-500">
-                  /month
-                </span>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+          {showcaseItems.map((item, idx) => {
+            const Icon = item.icon
+            return (
+              <div
+                key={idx}
+                className="rounded-2xl border border-neutral-900 overflow-hidden flex flex-col justify-between h-[360px] p-6 relative group"
+              >
+                {/* Background Gradient */}
+                <div className={`absolute inset-0 bg-gradient-to-b ${item.bgGradient} opacity-60 z-0`} />
+
+                <div className="flex justify-between items-start z-10">
+                  <span className="px-2.5 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider bg-rose-500/10 border border-rose-500/20 text-rose-400 flex items-center gap-1.5">
+                    <Icon className="w-3.5 h-3.5" />
+                    {item.tag}
+                  </span>
+                  <span className="text-[10px] text-neutral-600 font-mono">Seed: 847294</span>
+                </div>
+
+                {/* Prompt Details Card */}
+                <div className="bg-neutral-950/80 backdrop-blur-md border border-neutral-900 rounded-xl p-4 z-10 transition-all group-hover:border-neutral-800">
+                  <span className="text-[9px] text-rose-400 font-semibold uppercase tracking-widest block mb-1">
+                    System Prompt
+                  </span>
+                  <p className="text-xs text-neutral-300 font-medium leading-relaxed mb-3">
+                    &ldquo;{item.prompt}&rdquo;
+                  </p>
+                  <div className="flex items-center justify-between text-[10px] text-neutral-500 border-t border-neutral-900/60 pt-2">
+                    <span>Aspect Ratio: 16:9</span>
+                    <span>Duration: 4s</span>
+                  </div>
+                </div>
               </div>
-              <ul className="space-y-4 text-sm text-slate-300">
-                <li className="flex items-center gap-2.5">
-                  <svg
-                    className="w-4 h-4 text-violet-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={3}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                  Unlimited generation credits
-                </li>
-                <li className="flex items-center gap-2.5">
-                  <svg
-                    className="w-4 h-4 text-violet-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={3}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                  Dedicated cluster nodes (zero queue)
-                </li>
-                <li className="flex items-center gap-2.5">
-                  <svg
-                    className="w-4 h-4 text-violet-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={3}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                  Custom fine-tuned styles
-                </li>
-                <li className="flex items-center gap-2.5">
-                  <svg
-                    className="w-4 h-4 text-violet-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={3}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                  24/7 dedicated support
-                </li>
-              </ul>
-            </div>
-            <Link
-              href="/pricing"
-              className="mt-8 block w-full text-center px-4 py-2.5 rounded-lg text-sm font-semibold border border-slate-800 hover:border-slate-700 text-slate-200 hover:text-white bg-slate-950/50 hover:bg-slate-950 transition-colors"
-            >
-              Contact Sales
-            </Link>
+            )
+          })}
+        </div>
+      </section>
+
+      {/* TECH BANNER / TRUST BANNER */}
+      <section className="w-full max-w-5xl mx-auto px-6 py-20 border-t border-neutral-900/60 mt-16 z-10 flex flex-col md:flex-row justify-between items-center gap-8">
+        <div className="text-left max-w-xs">
+          <h3 className="text-sm font-bold text-white mb-1">State-of-the-Art Architecture</h3>
+          <p className="text-[11px] text-neutral-500 leading-relaxed">
+            Running with Next.js 16, React 19, Turbopack, and Dockerized database systems.
+          </p>
+        </div>
+
+        <div className="flex flex-wrap justify-center items-center gap-6 text-[10px] text-neutral-500 uppercase tracking-widest font-semibold">
+          <div className="flex items-center gap-2 border border-neutral-900 bg-neutral-900/20 px-3 py-1.5 rounded-lg">
+            <CpuIcon className="w-4 h-4 text-rose-500" />
+            <span>NextJS 16 & React 19</span>
+          </div>
+          <div className="flex items-center gap-2 border border-neutral-900 bg-neutral-900/20 px-3 py-1.5 rounded-lg">
+            <LaptopIcon className="w-4 h-4 text-rose-500" />
+            <span>Dockerized Services</span>
+          </div>
+          <div className="flex items-center gap-2 border border-neutral-900 bg-neutral-900/20 px-3 py-1.5 rounded-lg">
+            <LockIcon className="w-4 h-4 text-rose-500" />
+            <span>Supabase Secured</span>
           </div>
         </div>
       </section>
 
-      {/* Footer Section */}
-      <footer className="border-t border-slate-900 bg-slate-950 py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded bg-gradient-to-tr from-violet-600 to-indigo-600 flex items-center justify-center">
-              <svg
-                className="w-3.5 h-3.5 text-white"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2.5}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"
-                />
-              </svg>
-            </div>
-            <span className="text-sm font-bold text-slate-300">
-              VortexLogic
-            </span>
-          </div>
-          <p className="text-xs text-slate-500">
-            &copy; 2026 VortexLogic Inc. All rights reserved. Revamped from
-            Morphic stack.
+      {/* FINAL CALL TO ACTION */}
+      <section className="w-full bg-linear-to-b from-neutral-950 to-black py-28 relative z-10 border-t border-neutral-900/60">
+        <div className="max-w-3xl mx-auto px-6 text-center flex flex-col items-center">
+          <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-white mb-6">
+            Enter the Flow State of Creation
+          </h2>
+          <p className="text-xs md:text-sm text-neutral-400 max-w-lg mb-10 leading-relaxed">
+            Deploy VortexLogic on your servers or use our global hosting sandbox. Start generating premium AI output now.
           </p>
-          <div className="flex gap-6 text-xs text-slate-400">
-            <Link href="/studio" className="hover:text-slate-200">
-              Studio
+          <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+            <Link
+              href="/search-engine"
+              className="px-6 py-3 rounded-xl bg-rose-500 hover:bg-rose-600 text-sm font-semibold text-white shadow-lg shadow-rose-500/10 text-center transition-colors"
+            >
+              Start for Free
             </Link>
-            <Link href="/pricing" className="hover:text-slate-200">
-              Pricing
-            </Link>
-            <Link href="/search-engine" className="hover:text-slate-200">
-              Search Engine
-            </Link>
+            <button
+              onClick={() => setDemoOpen(true)}
+              className="px-6 py-3 rounded-xl border border-neutral-800 hover:bg-neutral-900/40 text-sm font-semibold text-neutral-300 text-center transition-colors cursor-pointer"
+            >
+              Request Enterprise Access
+            </button>
           </div>
+        </div>
+      </section>
+
+      {/* FOOTER */}
+      <footer className="w-full border-t border-neutral-900 bg-black py-12 text-xs text-neutral-500 relative z-10">
+        <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-neutral-300 text-sm">VortexLogic</span>
+            <span className="text-[10px] text-neutral-600">| MIT License</span>
+          </div>
+
+          <div className="flex items-center gap-6">
+            <a
+              href="https://github.com/vortexlogic/vortexlogic"
+              target="_blank"
+              rel="noreferrer"
+              className="hover:text-white transition-colors flex items-center gap-1.5"
+            >
+              <GithubIcon className="w-4 h-4" />
+              <span>GitHub</span>
+            </a>
+            <a href="/terms" className="hover:text-white transition-colors">
+              Terms
+            </a>
+            <a href="/privacy" className="hover:text-white transition-colors">
+              Privacy
+            </a>
+          </div>
+
+          <p className="text-[10px] text-neutral-600">
+            &copy; {new Date().getFullYear()} VortexLogic, Inc. All rights reserved.
+          </p>
         </div>
       </footer>
+
+      {/* BOOK DEMO MODAL POPUP */}
+      <BookDemoModal open={demoOpen} onOpenChange={setDemoOpen} />
     </div>
   )
 }

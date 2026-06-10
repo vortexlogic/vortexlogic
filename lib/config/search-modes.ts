@@ -1,8 +1,8 @@
 import {
+  IconMusic as Music,
   IconPhoto as Photo,
   IconSearch as Search,
-  IconVideo as Video
-} from '@tabler/icons-react'
+  IconVideo as Video} from '@tabler/icons-react'
 
 import { SearchMode } from '@/lib/types/search'
 
@@ -45,6 +45,13 @@ export const SEARCH_MODE_CONFIGS: SearchModeConfig[] = [
     description: 'Stunning cinematic AI video generation studio',
     icon: Video,
     color: 'text-rose-500'
+  },
+  {
+    value: 'music',
+    label: 'Music',
+    description: 'Beautiful high-fidelity AI music generation studio',
+    icon: Music,
+    color: 'text-cyan-500'
   }
 ]
 

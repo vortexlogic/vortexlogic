@@ -13,7 +13,7 @@ export default async function SearchPage(props: {
 }) {
   const { q } = await props.searchParams
   if (!q) {
-    redirect('/')
+    redirect('/search-engine')
   }
 
   const id = generateUUID()

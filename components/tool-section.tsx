@@ -6,6 +6,7 @@ import type { ToolPart, UIDataTypes, UIMessage, UITools } from '@/lib/types/ai'
 
 import FetchSection from './fetch-section'
 import { ImageGenerationSection } from './image-generation-section'
+import { MusicGenerationSection } from './music-generation-section'
 import { QuestionConfirmation } from './question-confirmation'
 import { SearchSection } from './search-section'
 import { ToolTodoDisplay } from './tool-todo-display'
@@ -115,6 +116,8 @@ export function ToolSection({
       return <ImageGenerationSection tool={tool as any} />
     case 'tool-generateVideo':
       return <VideoGenerationSection tool={tool as any} />
+    case 'tool-generateMusic':
+      return <MusicGenerationSection tool={tool as any} />
     default:
       return null
   }

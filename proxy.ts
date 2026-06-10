@@ -15,6 +15,10 @@ export async function proxy(request: NextRequest) {
   // Construct the base URL - ensure protocol has :// format
   const baseUrl = `${protocol}${protocol.endsWith(':') ? '//' : '://'}${host}`
 
+  // Mutate request headers to pass them to Server Components
+  request.headers.set('x-url', request.url)
+  request.headers.set('x-pathname', request.nextUrl.pathname)
+
   // Create a response
   let response: NextResponse
 
@@ -23,7 +27,9 @@ export async function proxy(request: NextRequest) {
   } else {
     // If Supabase is not configured, just pass the request through
     response = NextResponse.next({
-      request
+      request: {
+        headers: request.headers
+      }
     })
   }
 

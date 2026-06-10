@@ -288,3 +288,78 @@ export async function generateVideoAction(
     }
   }
 }
+
+// Helper to select an enabled LLM
+import { generateText } from 'ai'
+
+import { getModel, isProviderEnabled } from '@/lib/utils/registry'
+
+async function getEnabledLanguageModel() {
+  if (isProviderEnabled('openai')) {
+    return getModel('openai:gpt-4o-mini')
+  }
+  if (isProviderEnabled('google')) {
+    return getModel('google:gemini-1.5-flash')
+  }
+  if (isProviderEnabled('anthropic')) {
+    return getModel('anthropic:claude-3-5-sonnet')
+  }
+  if (isProviderEnabled('openai-compatible')) {
+    return getModel('openai-compatible:model')
+  }
+  if (isProviderEnabled('ollama')) {
+    return getModel('ollama:llama3')
+  }
+  return null
+}
+
+export async function studioChatAction(
+  messages: { role: 'user' | 'assistant'; content: string }[]
+): Promise<{ success: boolean; reply?: string; error?: string }> {
+  try {
+    const model = await getEnabledLanguageModel()
+    const systemPrompt = `You are the VortexLogic AI Studio assistant. Your goal is to help the user refine, brainstorm, and generate creative prompts for images and videos. Keep your responses inspiring, direct, and under 3 paragraphs. If you suggest a final refined prompt, wrap it inside a markdown block with the keyword PROMPT: like this:
+[PROMPT: a high quality photo of...]`
+
+    if (model) {
+      const { text } = await generateText({
+        model,
+        system: systemPrompt,
+        messages
+      })
+      return { success: true, reply: text }
+    }
+
+    // Fallback to pollinations.ai free text API (requires no keys)
+    const response = await fetch('https://text.pollinations.ai/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        messages: [
+          {
+            role: 'system',
+            content: systemPrompt
+          },
+          ...messages
+        ]
+      })
+    })
+
+    if (response.ok) {
+      const reply = await response.text()
+      return { success: true, reply }
+    }
+
+    return {
+      success: false,
+      error: 'No language model available and Pollinations fallback failed.'
+    }
+  } catch (err: any) {
+    console.error('Error in studioChatAction:', err)
+    return {
+      success: false,
+      error: err.message || 'Failed to get chat response'
+    }
+  }
+}
+

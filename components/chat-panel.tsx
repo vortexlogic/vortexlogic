@@ -15,8 +15,10 @@ import {
   IconArrowsDiagonal as ArrowsDiagonal,
   IconArrowUp as ArrowUp,
   IconChevronDown as ChevronDown,
+  IconCornerDownLeft as CornerDownLeft,
   IconFileText as FileText,
   IconMessageCirclePlus as MessageCirclePlus,
+  IconSettings as SettingsIcon,
   IconSquare as Square,
   IconX as X
 } from '@tabler/icons-react'
@@ -42,6 +44,7 @@ import {
 import { useArtifact } from './artifact/artifact-context'
 import { Button } from './ui/button'
 import { IconBlinkingLogo } from './ui/icons'
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
 import {
   Tooltip,
   TooltipContent,
@@ -50,6 +53,7 @@ import {
 } from './ui/tooltip'
 import { ActionButtons } from './action-buttons'
 import { FileUploadButton } from './file-upload-button'
+import { LandingHeroFooter,LandingHeroHeader } from './landing-hero'
 import { MessageNavigationDots } from './message-navigation-dots'
 import { ModelSelectorClient } from './model-selector-client'
 import { SearchModeSelector } from './search-mode-selector'
@@ -66,7 +70,7 @@ const PASTE_CARD_MIN_LINES = 6
 // time so the existing fetch tool picks it up.
 const BARE_URL_RE = /^https?:\/\/\S+$/
 
-const VALID_SEARCH_MODES = new Set(['quick', 'adaptive', 'image', 'video'])
+const VALID_SEARCH_MODES = new Set(['quick', 'adaptive', 'image', 'video', 'music'])
 
 function getSearchModeSnapshot(): SearchMode {
   const savedMode = getCookie('searchMode')
@@ -293,14 +297,7 @@ export function ChatPanel({
           : 'px-4 md:px-6'
       )}
     >
-      {messages.length === 0 && (
-        <div className="mb-6 md:mb-10 flex flex-col items-center gap-2 md:gap-4">
-          <IconBlinkingLogo className="size-12" />
-          <h1 className="text-xl md:text-2xl font-medium text-foreground">
-            What would you like to know?
-          </h1>
-        </div>
-      )}
+      {messages.length === 0 && <LandingHeroHeader />}
       {uploadedFiles.length > 0 && (
         <UploadedFileList files={uploadedFiles} onRemove={handleFileRemove} />
       )}
@@ -524,7 +521,9 @@ export function ChatPanel({
                   ? 'Describe the image you want to generate...'
                   : searchMode === 'video'
                     ? 'Describe the video you want to generate...'
-                    : 'Ask anything...'
+                    : searchMode === 'music'
+                      ? 'Describe the music you want to generate...'
+                      : 'Ask anything...'
             }
             spellCheck={false}
             value={input}
@@ -601,92 +600,6 @@ export function ChatPanel({
             }}
           />
 
-          {/* Options panel for image/video generation */}
-          {(searchMode === 'image' || searchMode === 'video') && (
-            <div className="flex flex-wrap items-center gap-3 px-3 py-2 border-t border-border/40 bg-muted/40 text-xs animate-in slide-in-from-bottom-2 duration-200">
-              {/* Aspect Ratio */}
-              <div className="flex items-center gap-1.5 bg-background/50 border rounded-lg p-1">
-                <span className="text-[10px] uppercase font-semibold text-muted-foreground px-1">
-                  Ratio:
-                </span>
-                {(searchMode === 'image'
-                  ? ['1:1', '16:9', '9:16', '4:3', '3:2']
-                  : ['16:9', '9:16', '1:1', '4:3']
-                ).map(ratio => (
-                  <button
-                    key={ratio}
-                    type="button"
-                    onClick={() => setAspectRatio(ratio)}
-                    className={cn(
-                      'px-2 py-0.5 rounded text-[11px] font-medium transition-all',
-                      aspectRatio === ratio
-                        ? searchMode === 'image'
-                          ? 'bg-emerald-500 text-white'
-                          : 'bg-rose-500 text-white'
-                        : 'hover:bg-muted text-muted-foreground hover:text-foreground'
-                    )}
-                  >
-                    {ratio}
-                  </button>
-                ))}
-              </div>
-
-              {/* Style Preset */}
-              <div className="flex items-center gap-1.5 bg-background/50 border rounded-lg p-1">
-                <span className="text-[10px] uppercase font-semibold text-muted-foreground px-1">
-                  Style:
-                </span>
-                {[
-                  'cinematic',
-                  'realistic',
-                  'anime',
-                  'cyberpunk',
-                  '3d-render'
-                ].map(style => (
-                  <button
-                    key={style}
-                    type="button"
-                    onClick={() => setStylePreset(style)}
-                    className={cn(
-                      'px-2 py-0.5 rounded text-[11px] font-medium capitalize transition-all',
-                      stylePreset === style
-                        ? searchMode === 'image'
-                          ? 'bg-emerald-500 text-white'
-                          : 'bg-rose-500 text-white'
-                        : 'hover:bg-muted text-muted-foreground hover:text-foreground'
-                    )}
-                  >
-                    {style.replace('-', ' ')}
-                  </button>
-                ))}
-              </div>
-
-              {/* Duration (Video only) */}
-              {searchMode === 'video' && (
-                <div className="flex items-center gap-1.5 bg-background/50 border rounded-lg p-1">
-                  <span className="text-[10px] uppercase font-semibold text-muted-foreground px-1">
-                    Duration:
-                  </span>
-                  {['5', '10', '15'].map(sec => (
-                    <button
-                      key={sec}
-                      type="button"
-                      onClick={() => setDuration(sec)}
-                      className={cn(
-                        'px-2 py-0.5 rounded text-[11px] font-medium transition-all',
-                        duration === sec
-                          ? 'bg-rose-500 text-white'
-                          : 'hover:bg-muted text-muted-foreground hover:text-foreground'
-                      )}
-                    >
-                      {sec}s
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-
           {/* Bottom menu area */}
           <div className="flex items-center justify-between p-2 md:p-3">
             <div className="flex items-center gap-2">
@@ -744,6 +657,108 @@ export function ChatPanel({
                 isAdaptiveAuthRequired={isAdaptiveAuthRequired}
                 onAdaptiveAuthRequired={onAdaptiveModeAuthRequired}
               />
+              {(searchMode === 'image' || searchMode === 'video') && (
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="size-8 md:size-10 rounded-full hover:bg-muted"
+                      type="button"
+                    >
+                      <SettingsIcon className="size-4" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-80 bg-background/95 backdrop-blur-md border border-border/80 rounded-2xl p-4 shadow-xl z-50" align="start">
+                    <div className="space-y-4">
+                      <div className="font-semibold text-xs text-muted-foreground uppercase tracking-wider">
+                        {searchMode === 'image' ? 'Image Settings' : 'Video Settings'}
+                      </div>
+                      
+                      {/* Aspect Ratio */}
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-medium text-foreground">Aspect Ratio</label>
+                        <div className="flex flex-wrap gap-1.5 bg-muted/40 p-1 rounded-lg border">
+                          {(searchMode === 'image'
+                            ? ['1:1', '16:9', '9:16', '4:3', '3:2']
+                            : ['16:9', '9:16', '1:1', '4:3']
+                          ).map(ratio => (
+                            <button
+                              key={ratio}
+                              type="button"
+                              onClick={() => setAspectRatio(ratio)}
+                              className={cn(
+                                'flex-1 px-2 py-1 rounded-md text-[11px] font-medium transition-all text-center',
+                                aspectRatio === ratio
+                                  ? searchMode === 'image'
+                                    ? 'bg-emerald-500 text-white shadow-xs'
+                                    : 'bg-rose-500 text-white shadow-xs'
+                                  : 'hover:bg-muted text-muted-foreground hover:text-foreground'
+                              )}
+                            >
+                              {ratio}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Style Preset */}
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-medium text-foreground">Style Preset</label>
+                        <div className="flex flex-wrap gap-1 bg-muted/40 p-1 rounded-lg border">
+                          {[
+                            'cinematic',
+                            'realistic',
+                            'anime',
+                            'cyberpunk',
+                            '3d-render'
+                          ].map(style => (
+                            <button
+                              key={style}
+                              type="button"
+                              onClick={() => setStylePreset(style)}
+                              className={cn(
+                                'flex-1 min-w-[70px] px-2 py-1 rounded-md text-[11px] font-medium capitalize transition-all text-center',
+                                stylePreset === style
+                                  ? searchMode === 'image'
+                                    ? 'bg-emerald-500 text-white shadow-xs'
+                                    : 'bg-rose-500 text-white shadow-xs'
+                                  : 'hover:bg-muted text-muted-foreground hover:text-foreground'
+                              )}
+                            >
+                              {style.replace('-', ' ')}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Duration (Video only) */}
+                      {searchMode === 'video' && (
+                        <div className="space-y-1.5">
+                          <label className="text-xs font-medium text-foreground">Duration</label>
+                          <div className="flex gap-1.5 bg-muted/40 p-1 rounded-lg border">
+                            {['5', '10', '15'].map(sec => (
+                              <button
+                                key={sec}
+                                type="button"
+                                onClick={() => setDuration(sec)}
+                                className={cn(
+                                  'flex-1 px-2 py-1 rounded-md text-[11px] font-medium transition-all text-center',
+                                  duration === sec
+                                    ? 'bg-rose-500 text-white shadow-xs'
+                                    : 'hover:bg-muted text-muted-foreground hover:text-foreground'
+                                )}
+                              >
+                                {sec}s
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </PopoverContent>
+                </Popover>
+              )}
             </div>
             <div className="flex items-center gap-2">
               {!isCloudDeployment && modelSelectorData && (
@@ -763,10 +778,11 @@ export function ChatPanel({
               )}
               <Button
                 type={isLoading ? 'button' : 'submit'}
+                variant="red"
                 size={'icon'}
                 className={cn(
                   isLoading && 'animate-pulse',
-                  'size-8 md:size-10 rounded-full'
+                  'size-8 md:size-10 rounded-full text-white'
                 )}
                 disabled={
                   (input.length === 0 && !isLoading) || !hasAvailableModels
@@ -781,7 +797,7 @@ export function ChatPanel({
                 {isLoading ? (
                   <Square className="size-4 md:size-5" />
                 ) : (
-                  <ArrowUp className="size-4 md:size-5" />
+                  <CornerDownLeft className="size-4 md:size-5" />
                 )}
               </Button>
             </div>
@@ -817,6 +833,7 @@ export function ChatPanel({
           />
         )}
       </form>
+      {messages.length === 0 && <LandingHeroFooter />}
     </div>
   )
 }

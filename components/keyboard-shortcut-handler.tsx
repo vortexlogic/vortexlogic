@@ -22,7 +22,8 @@ const SEARCH_MODE_LABELS: Record<SearchMode, string> = {
   quick: 'Quick',
   adaptive: 'Adaptive',
   image: 'Image',
-  video: 'Video'
+  video: 'Video',
+  music: 'Music'
 }
 
 export function KeyboardShortcutHandler() {

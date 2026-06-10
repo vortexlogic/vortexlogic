@@ -517,8 +517,8 @@ export function Chat({
     <ChatProvider sendMessage={safeSendMessage} isStreamingRef={isStreamingRef}>
       <div
         className={cn(
-          'relative flex h-full min-w-0 flex-1 flex-col',
-          messages.length === 0 ? 'items-center justify-center' : ''
+          'relative flex min-w-0 flex-1 flex-col',
+          messages.length === 0 ? 'h-full overflow-y-auto w-full' : 'h-full overflow-hidden'
         )}
         data-testid="full-chat"
         onDragOver={dragHandlers.handleDragOver}

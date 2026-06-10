@@ -5,6 +5,7 @@ import { type Model } from '@/lib/types/models'
 
 import { fetchTool } from '../tools/fetch'
 import { generateImageTool } from '../tools/generateImage'
+import { generateMusicTool } from '../tools/generateMusic'
 import { generateVideoTool } from '../tools/generateVideo'
 import { createQuestionTool } from '../tools/question'
 import { createSearchTool } from '../tools/search'
@@ -16,6 +17,7 @@ import { isTracingEnabled } from '../utils/telemetry'
 import {
   getAdaptiveModePrompt,
   getImageModePrompt,
+  getMusicModePrompt,
   getVideoModePrompt,
   QUICK_MODE_PROMPT
 } from './prompts/search-mode-prompts'
@@ -121,12 +123,21 @@ export function createResearcher({
         maxSteps = 5
         break
 
+      case 'music':
+        console.log(
+          '[Researcher] Music mode: maxSteps=5, tools=[generateMusic]'
+        )
+        systemPrompt = `${getMusicModePrompt()}\n\nUser's selected generation settings:\n- Duration: ${duration || '30'} seconds\n\nYou MUST use these exact settings when calling the generateMusic tool.`
+        activeToolsList = ['generateMusic']
+        maxSteps = 5
+        break
+
       case 'quick':
         console.log(
-          '[Researcher] Quick mode: maxSteps=20, tools=[search, fetch, generateImage, generateVideo]'
+          '[Researcher] Quick mode: maxSteps=20, tools=[search, fetch, generateImage, generateVideo, generateMusic]'
         )
         systemPrompt = QUICK_MODE_PROMPT
-        activeToolsList = ['search', 'fetch', 'generateImage', 'generateVideo']
+        activeToolsList = ['search', 'fetch', 'generateImage', 'generateVideo', 'generateMusic']
         maxSteps = 20
         searchTool = wrapSearchToolForQuickMode(originalSearchTool)
         break
@@ -139,7 +150,8 @@ export function createResearcher({
           'fetch',
           'todoWrite',
           'generateImage',
-          'generateVideo'
+          'generateVideo',
+          'generateMusic'
         ]
         console.log(
           `[Researcher] Adaptive mode: maxSteps=50, tools=[${activeToolsList.join(', ')}]`
@@ -156,6 +168,7 @@ export function createResearcher({
       askQuestion: askQuestionTool,
       generateImage: generateImageTool,
       generateVideo: generateVideoTool,
+      generateMusic: generateMusicTool,
       ...todoTools
     } as ResearcherTools
 

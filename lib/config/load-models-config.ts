@@ -10,6 +10,7 @@ export interface ModelsConfig {
     adaptive: Model
     image?: Model
     video?: Model
+    music?: Model
   }
 }
 

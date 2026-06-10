@@ -3,6 +3,7 @@ import type { InferUITool, UIMessage as AIMessage } from 'ai'
 
 import { fetchTool } from '@/lib/tools/fetch'
 import { generateImageTool } from '@/lib/tools/generateImage'
+import { generateMusicTool } from '@/lib/tools/generateMusic'
 import { generateVideoTool } from '@/lib/tools/generateVideo'
 import { askQuestionTool } from '@/lib/tools/question'
 import { searchTool } from '@/lib/tools/search'
@@ -44,6 +45,7 @@ export type UITools = {
   todoWrite: InferUITool<typeof todoTools.todoWrite>
   generateImage: InferUITool<typeof generateImageTool>
   generateVideo: InferUITool<typeof generateVideoTool>
+  generateMusic: InferUITool<typeof generateMusicTool>
   // Dynamic tools will be added at runtime
   [key: string]: any
 }

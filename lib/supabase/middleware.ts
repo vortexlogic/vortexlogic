@@ -48,8 +48,10 @@ export async function updateSession(request: NextRequest) {
     '/', // Root path
     '/auth', // Auth-related pages
     '/share', // Share pages
-    '/api' // API routes
-    // Add other public paths here if needed
+    '/api', // API routes
+    '/search-engine', // Search engine page
+    '/search', // Search results page
+    '/studio' // Creative studio page
   ]
 
   const pathname = request.nextUrl.pathname
