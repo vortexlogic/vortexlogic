@@ -6,6 +6,7 @@ import {
 } from 'ai'
 import { randomUUID } from 'crypto'
 import { Langfuse } from 'langfuse'
+import { cookies } from 'next/headers'
 
 import { researcher } from '@/lib/agents/researcher'
 import {
@@ -124,12 +125,20 @@ export async function createChatStreamResponse(
     const messagesToModel = await prepareMessages(context, message)
     perfTime('prepareMessages completed (stream)', prepareStart)
 
+    const cookieStore = await cookies()
+    const aspectRatio = cookieStore.get('aspectRatio')?.value
+    const stylePreset = cookieStore.get('stylePreset')?.value
+    const duration = cookieStore.get('duration')?.value
+
     // Get the researcher agent with parent trace ID and search mode.
     const researchAgent = researcher({
       model: context.modelId,
       modelConfig: model,
       parentTraceId,
-      searchMode
+      searchMode,
+      aspectRatio,
+      stylePreset,
+      duration
     })
 
     // For OpenAI models, strip reasoning parts from UIMessages before conversion

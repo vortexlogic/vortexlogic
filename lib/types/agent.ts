@@ -7,6 +7,8 @@ import type {
 } from 'ai'
 
 import type { fetchTool } from '../tools/fetch'
+import type { generateImageTool } from '../tools/generateImage'
+import type { generateVideoTool } from '../tools/generateVideo'
 import type { createQuestionTool } from '../tools/question'
 import type { createSearchTool } from '../tools/search'
 import type { createTodoTools } from '../tools/todo'
@@ -16,6 +18,8 @@ export type ResearcherTools = {
   search: ReturnType<typeof createSearchTool>
   fetch: typeof fetchTool
   askQuestion: ReturnType<typeof createQuestionTool>
+  generateImage: typeof generateImageTool
+  generateVideo: typeof generateVideoTool
 } & ReturnType<typeof createTodoTools>
 
 // Type alias for the researcher agent using ToolLoopAgent
@@ -37,6 +41,12 @@ export type QuestionToolInvocation = UIToolInvocation<
 export type TodoWriteToolInvocation = UIToolInvocation<
   ResearcherTools['todoWrite']
 >
+export type GenerateImageToolInvocation = UIToolInvocation<
+  ResearcherTools['generateImage']
+>
+export type GenerateVideoToolInvocation = UIToolInvocation<
+  ResearcherTools['generateVideo']
+>
 
 // Union type for all tool invocations
 export type ResearcherToolInvocation =
@@ -44,6 +54,8 @@ export type ResearcherToolInvocation =
   | FetchToolInvocation
   | QuestionToolInvocation
   | TodoWriteToolInvocation
+  | GenerateImageToolInvocation
+  | GenerateVideoToolInvocation
 
 // Helper type to extract tool names
 export type ResearcherToolName = keyof ResearcherTools

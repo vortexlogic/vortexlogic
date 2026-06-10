@@ -66,8 +66,11 @@ const PASTE_CARD_MIN_LINES = 6
 // time so the existing fetch tool picks it up.
 const BARE_URL_RE = /^https?:\/\/\S+$/
 
+const VALID_SEARCH_MODES = new Set(['quick', 'adaptive', 'image', 'video'])
+
 function getSearchModeSnapshot(): SearchMode {
-  return getCookie('searchMode') === 'adaptive' ? 'adaptive' : 'quick'
+  const savedMode = getCookie('searchMode')
+  return VALID_SEARCH_MODES.has(savedMode) ? (savedMode as SearchMode) : 'quick'
 }
 
 interface ChatPanelProps {
@@ -150,6 +153,32 @@ export function ChatPanel({
     isGuest,
     isCloudDeployment
   })
+
+  const [aspectRatio, setAspectRatioState] = useState(() => getCookie('aspectRatio') || '1:1')
+  const [stylePreset, setStylePresetState] = useState(() => getCookie('stylePreset') || 'cinematic')
+  const [duration, setDurationState] = useState(() => getCookie('duration') || '5')
+
+  const setAspectRatio = (val: string) => {
+    setAspectRatioState(val)
+    setCookie('aspectRatio', val)
+  }
+  const setStylePreset = (val: string) => {
+    setStylePresetState(val)
+    setCookie('stylePreset', val)
+  }
+  const setDuration = (val: string) => {
+    setDurationState(val)
+    setCookie('duration', val)
+  }
+
+  useEffect(() => {
+    if (searchMode === 'video' && aspectRatio === '1:1') {
+      setAspectRatio('16:9')
+    } else if (searchMode === 'image' && aspectRatio === '16:9') {
+      setAspectRatio('1:1')
+    }
+  }, [searchMode])
+
 
   const handleCompositionStart = () => setIsComposing(true)
 
@@ -481,7 +510,15 @@ export function ChatPanel({
             onCompositionEnd={handleCompositionEnd}
             onFocus={() => setIsInputFocused(true)}
             onBlur={() => setIsInputFocused(false)}
-            placeholder={messages.length > 0 ? 'Reply...' : 'Ask anything...'}
+            placeholder={
+              messages.length > 0
+                ? 'Reply...'
+                : searchMode === 'image'
+                  ? 'Describe the image you want to generate...'
+                  : searchMode === 'video'
+                    ? 'Describe the video you want to generate...'
+                    : 'Ask anything...'
+            }
             spellCheck={false}
             value={input}
             disabled={isLoading || isToolInvocationInProgress()}
@@ -556,6 +593,73 @@ export function ChatPanel({
               }
             }}
           />
+
+          {/* Options panel for image/video generation */}
+          {(searchMode === 'image' || searchMode === 'video') && (
+            <div className="flex flex-wrap items-center gap-3 px-3 py-2 border-t border-border/40 bg-muted/40 text-xs animate-in slide-in-from-bottom-2 duration-200">
+              {/* Aspect Ratio */}
+              <div className="flex items-center gap-1.5 bg-background/50 border rounded-lg p-1">
+                <span className="text-[10px] uppercase font-semibold text-muted-foreground px-1">Ratio:</span>
+                {(searchMode === 'image' ? ['1:1', '16:9', '9:16', '4:3', '3:2'] : ['16:9', '9:16', '1:1', '4:3']).map(ratio => (
+                  <button
+                    key={ratio}
+                    type="button"
+                    onClick={() => setAspectRatio(ratio)}
+                    className={cn(
+                      "px-2 py-0.5 rounded text-[11px] font-medium transition-all",
+                      aspectRatio === ratio
+                        ? (searchMode === 'image' ? "bg-emerald-500 text-white" : "bg-rose-500 text-white")
+                        : "hover:bg-muted text-muted-foreground hover:text-foreground"
+                    )}
+                  >
+                    {ratio}
+                  </button>
+                ))}
+              </div>
+
+              {/* Style Preset */}
+              <div className="flex items-center gap-1.5 bg-background/50 border rounded-lg p-1">
+                <span className="text-[10px] uppercase font-semibold text-muted-foreground px-1">Style:</span>
+                {['cinematic', 'realistic', 'anime', 'cyberpunk', '3d-render'].map(style => (
+                  <button
+                    key={style}
+                    type="button"
+                    onClick={() => setStylePreset(style)}
+                    className={cn(
+                      "px-2 py-0.5 rounded text-[11px] font-medium capitalize transition-all",
+                      stylePreset === style
+                        ? (searchMode === 'image' ? "bg-emerald-500 text-white" : "bg-rose-500 text-white")
+                        : "hover:bg-muted text-muted-foreground hover:text-foreground"
+                    )}
+                  >
+                    {style.replace('-', ' ')}
+                  </button>
+                ))}
+              </div>
+
+              {/* Duration (Video only) */}
+              {searchMode === 'video' && (
+                <div className="flex items-center gap-1.5 bg-background/50 border rounded-lg p-1">
+                  <span className="text-[10px] uppercase font-semibold text-muted-foreground px-1">Duration:</span>
+                  {['5', '10', '15'].map(sec => (
+                    <button
+                      key={sec}
+                      type="button"
+                      onClick={() => setDuration(sec)}
+                      className={cn(
+                        "px-2 py-0.5 rounded text-[11px] font-medium transition-all",
+                        duration === sec
+                          ? "bg-rose-500 text-white"
+                          : "hover:bg-muted text-muted-foreground hover:text-foreground"
+                      )}
+                    >
+                      {sec}s
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Bottom menu area */}
           <div className="flex items-center justify-between p-2 md:p-3">

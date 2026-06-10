@@ -105,7 +105,7 @@ export async function POST(req: Request) {
     // Get search mode from cookie
     const searchModeCookie = cookieStore.get('searchMode')?.value
     const searchMode: SearchMode =
-      searchModeCookie && ['quick', 'adaptive'].includes(searchModeCookie)
+      searchModeCookie && ['quick', 'adaptive', 'image', 'video'].includes(searchModeCookie)
         ? (searchModeCookie as SearchMode)
         : 'quick'
 

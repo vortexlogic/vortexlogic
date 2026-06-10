@@ -1,4 +1,8 @@
-import { IconSearch as Search } from '@tabler/icons-react'
+import {
+  IconSearch as Search,
+  IconPhoto as Photo,
+  IconVideo as Video
+} from '@tabler/icons-react'
 
 import { SearchMode } from '@/lib/types/search'
 
@@ -27,6 +31,20 @@ export const SEARCH_MODE_CONFIGS: SearchModeConfig[] = [
     description: 'Adaptive agentic search with intelligent query understanding',
     icon: IconLogoOutline,
     color: 'text-violet-500'
+  },
+  {
+    value: 'image',
+    label: 'Image',
+    description: 'High-quality AI image generation and editing',
+    icon: Photo,
+    color: 'text-emerald-500'
+  },
+  {
+    value: 'video',
+    label: 'Video',
+    description: 'Stunning cinematic AI video generation studio',
+    icon: Video,
+    color: 'text-rose-500'
   }
 ]
 
@@ -36,3 +54,4 @@ export function getSearchModeConfig(
 ): SearchModeConfig | undefined {
   return SEARCH_MODE_CONFIGS.find(config => config.value === mode)
 }
+

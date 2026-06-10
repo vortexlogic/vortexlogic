@@ -7,6 +7,7 @@ import {
 } from 'ai'
 import { randomUUID } from 'crypto'
 import { Langfuse } from 'langfuse'
+import { cookies } from 'next/headers'
 
 import { researcher } from '@/lib/agents/researcher'
 import {
@@ -90,11 +91,19 @@ export async function createEphemeralChatStreamResponse(
       modelMessages = truncateMessages(modelMessages, maxTokens, model.id)
     }
 
+    const cookieStore = await cookies()
+    const aspectRatio = cookieStore.get('aspectRatio')?.value
+    const stylePreset = cookieStore.get('stylePreset')?.value
+    const duration = cookieStore.get('duration')?.value
+
     const researchAgent = researcher({
       model: `${model.providerId}:${model.id}`,
       modelConfig: model,
       parentTraceId,
-      searchMode
+      searchMode,
+      aspectRatio,
+      stylePreset,
+      duration
     })
 
     const modelId = `${model.providerId}:${model.id}`

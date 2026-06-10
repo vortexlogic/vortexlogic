@@ -25,11 +25,11 @@ import {
 } from './ui/dropdown-menu'
 import { HoverCard, HoverCardContent, HoverCardTrigger } from './ui/hover-card'
 
-const VALID_SEARCH_MODES = new Set(['quick', 'adaptive'])
+const VALID_SEARCH_MODES = new Set(['quick', 'adaptive', 'image', 'video'])
 
 function getSearchModeSnapshot(): SearchMode {
   const savedMode = getCookie('searchMode')
-  return savedMode === 'adaptive' ? 'adaptive' : 'quick'
+  return VALID_SEARCH_MODES.has(savedMode) ? (savedMode as SearchMode) : 'quick'
 }
 
 interface SearchModeSelectorProps {

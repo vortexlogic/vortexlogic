@@ -2,6 +2,8 @@ import type { ReasoningPart, TextPart } from '@ai-sdk/provider-utils'
 import type { InferUITool, UIMessage as AIMessage } from 'ai'
 
 import { fetchTool } from '@/lib/tools/fetch'
+import { generateImageTool } from '@/lib/tools/generateImage'
+import { generateVideoTool } from '@/lib/tools/generateVideo'
 import { askQuestionTool } from '@/lib/tools/question'
 import { searchTool } from '@/lib/tools/search'
 import { createTodoTools, type TodoItem } from '@/lib/tools/todo'
@@ -40,6 +42,8 @@ export type UITools = {
   fetch: InferUITool<typeof fetchTool>
   askQuestion: InferUITool<typeof askQuestionTool>
   todoWrite: InferUITool<typeof todoTools.todoWrite>
+  generateImage: InferUITool<typeof generateImageTool>
+  generateVideo: InferUITool<typeof generateVideoTool>
   // Dynamic tools will be added at runtime
   [key: string]: any
 }

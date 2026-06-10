@@ -4,6 +4,8 @@ import type { ResearcherTools } from '@/lib/types/agent'
 import { type Model } from '@/lib/types/models'
 
 import { fetchTool } from '../tools/fetch'
+import { generateImageTool } from '../tools/generateImage'
+import { generateVideoTool } from '../tools/generateVideo'
 import { createQuestionTool } from '../tools/question'
 import { createSearchTool } from '../tools/search'
 import { createTodoTools } from '../tools/todo'
@@ -13,6 +15,8 @@ import { isTracingEnabled } from '../utils/telemetry'
 
 import {
   getAdaptiveModePrompt,
+  getImageModePrompt,
+  getVideoModePrompt,
   QUICK_MODE_PROMPT
 } from './prompts/search-mode-prompts'
 
@@ -71,12 +75,18 @@ export function createResearcher({
   model,
   modelConfig,
   parentTraceId,
-  searchMode = 'adaptive'
+  searchMode = 'adaptive',
+  aspectRatio,
+  stylePreset,
+  duration
 }: {
   model: string
   modelConfig?: Model
   parentTraceId?: string
   searchMode?: SearchMode
+  aspectRatio?: string
+  stylePreset?: string
+  duration?: string
 }) {
   try {
     const currentDate = new Date().toLocaleString()
@@ -93,12 +103,26 @@ export function createResearcher({
 
     // Configure based on search mode
     switch (searchMode) {
+      case 'image':
+        console.log('[Researcher] Image mode: maxSteps=5, tools=[generateImage]')
+        systemPrompt = `${getImageModePrompt()}\n\nUser's selected generation settings:\n- Aspect Ratio: ${aspectRatio || '1:1'}\n- Style Preset: ${stylePreset || 'cinematic'}\n\nYou MUST use these exact settings when calling the generateImage tool.`
+        activeToolsList = ['generateImage']
+        maxSteps = 5
+        break
+
+      case 'video':
+        console.log('[Researcher] Video mode: maxSteps=5, tools=[generateVideo]')
+        systemPrompt = `${getVideoModePrompt()}\n\nUser's selected generation settings:\n- Aspect Ratio: ${aspectRatio || '16:9'}\n- Style Preset: ${stylePreset || 'cinematic'}\n- Duration: ${duration || '5'} seconds\n\nYou MUST use these exact settings when calling the generateVideo tool.`
+        activeToolsList = ['generateVideo']
+        maxSteps = 5
+        break
+
       case 'quick':
         console.log(
-          '[Researcher] Quick mode: maxSteps=20, tools=[search, fetch]'
+          '[Researcher] Quick mode: maxSteps=20, tools=[search, fetch, generateImage, generateVideo]'
         )
         systemPrompt = QUICK_MODE_PROMPT
-        activeToolsList = ['search', 'fetch']
+        activeToolsList = ['search', 'fetch', 'generateImage', 'generateVideo']
         maxSteps = 20
         searchTool = wrapSearchToolForQuickMode(originalSearchTool)
         break
@@ -106,7 +130,7 @@ export function createResearcher({
       case 'adaptive':
       default:
         systemPrompt = getAdaptiveModePrompt()
-        activeToolsList = ['search', 'fetch', 'todoWrite']
+        activeToolsList = ['search', 'fetch', 'todoWrite', 'generateImage', 'generateVideo']
         console.log(
           `[Researcher] Adaptive mode: maxSteps=50, tools=[${activeToolsList.join(', ')}]`
         )
@@ -120,6 +144,8 @@ export function createResearcher({
       search: searchTool,
       fetch: fetchTool,
       askQuestion: askQuestionTool,
+      generateImage: generateImageTool,
+      generateVideo: generateVideoTool,
       ...todoTools
     } as ResearcherTools
 
