@@ -44,12 +44,16 @@ VortexLogic revamps the open-source Morphic stack into a full-scale AI video/art
 ## ⚙️ Installation & Local Development
 
 ### 1. Prerequisites
+
 Ensure you have the following installed:
+
 - [Node.js](https://nodejs.org/) (or [Bun](https://bun.sh/) for ultra-fast runtimes)
 - [Docker & Docker Compose](https://www.docker.com/)
 
 ### 2. Configure Environment Variables
+
 Clone the repository and copy the example environment configuration:
+
 ```bash
 git clone https://github.com/vortexlogic/vortexlogic.git
 cd vortexlogic
@@ -57,21 +61,26 @@ cp .env.local.example .env.local
 ```
 
 Edit `.env.local` and define the required keys:
+
 ```env
 OPENAI_API_KEY=your_openai_api_key
 DATABASE_URL=postgresql://morphic:morphic@localhost:5432/morphic
 LOCAL_REDIS_URL=redis://localhost:6379
 ENABLE_AUTH=false
 ```
-*(Optionally define `FAL_KEY` or `REPLICATE_API_TOKEN` to unlock Luma / Flux API models inside the studio. Otherwise, the app falls back to Pollinations.ai free model automatically).*
+
+_(Optionally define `FAL_KEY` or `REPLICATE_API_TOKEN` to unlock Luma / Flux API models inside the studio. Otherwise, the app falls back to Pollinations.ai free model automatically)._
 
 ### 3. Spin up Backend Services
+
 VortexLogic relies on local PostgreSQL and Redis. Start them instantly using Docker:
+
 ```bash
 docker compose up -d postgres redis searxng
 ```
 
 ### 4. Run Migrations & Start Development
+
 Apply Drizzle schema migrations to your local DB and start the Next.js development server:
 
 ```bash

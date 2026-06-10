@@ -29,7 +29,9 @@ const VALID_SEARCH_MODES = new Set(['quick', 'adaptive', 'image', 'video'])
 
 function getSearchModeSnapshot(): SearchMode {
   const savedMode = getCookie('searchMode')
-  return VALID_SEARCH_MODES.has(savedMode) ? (savedMode as SearchMode) : 'quick'
+  return savedMode && VALID_SEARCH_MODES.has(savedMode)
+    ? (savedMode as SearchMode)
+    : 'quick'
 }
 
 interface SearchModeSelectorProps {

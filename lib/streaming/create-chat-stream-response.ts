@@ -1,3 +1,5 @@
+import { cookies } from 'next/headers'
+
 import {
   consumeStream,
   convertToModelMessages,
@@ -6,7 +8,6 @@ import {
 } from 'ai'
 import { randomUUID } from 'crypto'
 import { Langfuse } from 'langfuse'
-import { cookies } from 'next/headers'
 
 import { researcher } from '@/lib/agents/researcher'
 import {

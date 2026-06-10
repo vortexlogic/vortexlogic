@@ -1,19 +1,25 @@
 'use client'
 
 import { useState } from 'react'
+
 import {
-  IconDownload as Download,
-  IconCopy as Copy,
   IconCheck as Check,
-  IconSparkles as Sparkles,
-  IconPhoto as Photo
+  IconCopy as Copy,
+  IconDownload as Download,
+  IconPhoto as Photo,
+  IconSparkles as Sparkles
 } from '@tabler/icons-react'
 import { toast } from 'sonner'
+
 import { cn } from '@/lib/utils'
 
 interface ImageGenerationSectionProps {
   tool: {
-    state: 'input-streaming' | 'input-available' | 'output-available' | 'output-error'
+    state:
+      | 'input-streaming'
+      | 'input-available'
+      | 'output-available'
+      | 'output-error'
     input: {
       prompt: string
       aspectRatio?: string
@@ -33,8 +39,11 @@ interface ImageGenerationSectionProps {
 export function ImageGenerationSection({ tool }: ImageGenerationSectionProps) {
   const { state, input, output, errorText } = tool
   const [copied, setCopied] = useState(false)
-  
-  const isGenerating = state === 'input-streaming' || state === 'input-available' || (!output && state !== 'output-error')
+
+  const isGenerating =
+    state === 'input-streaming' ||
+    state === 'input-available' ||
+    (!output && state !== 'output-error')
   const promptText = output?.prompt || input.prompt
   const imageUrl = output?.url
 
@@ -71,7 +80,9 @@ export function ImageGenerationSection({ tool }: ImageGenerationSectionProps) {
     return (
       <div className="rounded-2xl border border-destructive/20 bg-destructive/5 p-4 text-sm text-destructive">
         <h4 className="font-semibold mb-1">Image Generation Failed</h4>
-        <p className="text-xs opacity-90">{errorText || 'An error occurred during image generation.'}</p>
+        <p className="text-xs opacity-90">
+          {errorText || 'An error occurred during image generation.'}
+        </p>
       </div>
     )
   }
@@ -93,11 +104,14 @@ export function ImageGenerationSection({ tool }: ImageGenerationSectionProps) {
                 Synthesizing pixels...
               </p>
               <p className="text-xs text-muted-foreground max-w-sm">
-                "{input.prompt}"
+                &ldquo;{input.prompt}&rdquo;
               </p>
             </div>
             <div className="w-48 h-1.5 bg-muted rounded-full overflow-hidden">
-              <div className="h-full bg-emerald-500 rounded-full animate-progress-bar" style={{ width: '60%' }} />
+              <div
+                className="h-full bg-emerald-500 rounded-full animate-progress-bar"
+                style={{ width: '60%' }}
+              />
             </div>
           </div>
         ) : (
@@ -146,7 +160,9 @@ export function ImageGenerationSection({ tool }: ImageGenerationSectionProps) {
                 </div>
 
                 <div className="space-y-1.5">
-                  <span className="text-[11px] font-medium text-muted-foreground">Prompt</span>
+                  <span className="text-[11px] font-medium text-muted-foreground">
+                    Prompt
+                  </span>
                   <p className="text-xs text-foreground leading-relaxed line-clamp-6 bg-muted/40 p-2.5 rounded-lg border border-border/50">
                     {promptText}
                   </p>
@@ -154,12 +170,20 @@ export function ImageGenerationSection({ tool }: ImageGenerationSectionProps) {
 
                 <div className="grid grid-cols-2 gap-2 text-xs">
                   <div className="bg-muted/40 p-2 rounded-lg border border-border/50">
-                    <div className="text-[10px] text-muted-foreground">Aspect Ratio</div>
-                    <div className="font-semibold">{output?.aspectRatio || input.aspectRatio || '1:1'}</div>
+                    <div className="text-[10px] text-muted-foreground">
+                      Aspect Ratio
+                    </div>
+                    <div className="font-semibold">
+                      {output?.aspectRatio || input.aspectRatio || '1:1'}
+                    </div>
                   </div>
                   <div className="bg-muted/40 p-2 rounded-lg border border-border/50">
-                    <div className="text-[10px] text-muted-foreground">Type</div>
-                    <div className="font-semibold capitalize">{output?.style || input.style || 'Standard'}</div>
+                    <div className="text-[10px] text-muted-foreground">
+                      Type
+                    </div>
+                    <div className="font-semibold capitalize">
+                      {output?.style || input.style || 'Standard'}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -169,7 +193,11 @@ export function ImageGenerationSection({ tool }: ImageGenerationSectionProps) {
                   onClick={handleCopyPrompt}
                   className="flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border bg-background hover:bg-muted text-foreground transition-colors"
                 >
-                  {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                  {copied ? (
+                    <Check className="w-3.5 h-3.5" />
+                  ) : (
+                    <Copy className="w-3.5 h-3.5" />
+                  )}
                   Copy Prompt
                 </button>
                 <button

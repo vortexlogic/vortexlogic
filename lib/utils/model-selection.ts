@@ -12,7 +12,12 @@ import { Model } from '@/lib/types/models'
 import { SearchMode } from '@/lib/types/search'
 import { isProviderEnabled } from '@/lib/utils/registry'
 
-const MODE_FALLBACK_ORDER: SearchMode[] = ['quick', 'adaptive', 'image', 'video']
+const MODE_FALLBACK_ORDER: SearchMode[] = [
+  'quick',
+  'adaptive',
+  'image',
+  'video'
+]
 const PROVIDER_LABELS: Record<string, string> = {
   openai: 'OpenAI',
   anthropic: 'Anthropic',

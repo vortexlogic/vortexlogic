@@ -1,10 +1,11 @@
 'use client'
 
 import { useState } from 'react'
+
 import {
-  IconDownload as Download,
-  IconCopy as Copy,
   IconCheck as Check,
+  IconCopy as Copy,
+  IconDownload as Download,
   IconSparkles as Sparkles,
   IconVideo as VideoIcon
 } from '@tabler/icons-react'
@@ -12,7 +13,11 @@ import { toast } from 'sonner'
 
 interface VideoGenerationSectionProps {
   tool: {
-    state: 'input-streaming' | 'input-available' | 'output-available' | 'output-error'
+    state:
+      | 'input-streaming'
+      | 'input-available'
+      | 'output-available'
+      | 'output-error'
     input: {
       prompt: string
       aspectRatio?: string
@@ -36,7 +41,10 @@ export function VideoGenerationSection({ tool }: VideoGenerationSectionProps) {
   const { state, input, output, errorText } = tool
   const [copied, setCopied] = useState(false)
 
-  const isGenerating = state === 'input-streaming' || state === 'input-available' || (!output && state !== 'output-error')
+  const isGenerating =
+    state === 'input-streaming' ||
+    state === 'input-available' ||
+    (!output && state !== 'output-error')
   const promptText = output?.prompt || input.prompt
   const videoUrl = output?.url
 
@@ -72,7 +80,9 @@ export function VideoGenerationSection({ tool }: VideoGenerationSectionProps) {
     return (
       <div className="rounded-2xl border border-destructive/20 bg-destructive/5 p-4 text-sm text-destructive">
         <h4 className="font-semibold mb-1">Video Generation Failed</h4>
-        <p className="text-xs opacity-90">{errorText || 'An error occurred during video generation.'}</p>
+        <p className="text-xs opacity-90">
+          {errorText || 'An error occurred during video generation.'}
+        </p>
       </div>
     )
   }
@@ -94,11 +104,14 @@ export function VideoGenerationSection({ tool }: VideoGenerationSectionProps) {
                 Rendering cinematic frames...
               </p>
               <p className="text-xs text-muted-foreground max-w-sm">
-                "{input.prompt}"
+                &ldquo;{input.prompt}&rdquo;
               </p>
             </div>
             <div className="w-48 h-1.5 bg-muted rounded-full overflow-hidden">
-              <div className="h-full bg-rose-500 rounded-full animate-progress-bar" style={{ width: '40%' }} />
+              <div
+                className="h-full bg-rose-500 rounded-full animate-progress-bar"
+                style={{ width: '40%' }}
+              />
             </div>
           </div>
         ) : (
@@ -139,7 +152,9 @@ export function VideoGenerationSection({ tool }: VideoGenerationSectionProps) {
                 </div>
 
                 <div className="space-y-1.5">
-                  <span className="text-[11px] font-medium text-muted-foreground">Prompt</span>
+                  <span className="text-[11px] font-medium text-muted-foreground">
+                    Prompt
+                  </span>
                   <p className="text-xs text-foreground leading-relaxed line-clamp-6 bg-muted/40 p-2.5 rounded-lg border border-border/50">
                     {promptText}
                   </p>
@@ -147,12 +162,20 @@ export function VideoGenerationSection({ tool }: VideoGenerationSectionProps) {
 
                 <div className="grid grid-cols-2 gap-2 text-xs">
                   <div className="bg-muted/40 p-2 rounded-lg border border-border/50">
-                    <div className="text-[10px] text-muted-foreground">Aspect Ratio</div>
-                    <div className="font-semibold">{output?.aspectRatio || input.aspectRatio || '16:9'}</div>
+                    <div className="text-[10px] text-muted-foreground">
+                      Aspect Ratio
+                    </div>
+                    <div className="font-semibold">
+                      {output?.aspectRatio || input.aspectRatio || '16:9'}
+                    </div>
                   </div>
                   <div className="bg-muted/40 p-2 rounded-lg border border-border/50">
-                    <div className="text-[10px] text-muted-foreground">Duration</div>
-                    <div className="font-semibold">{output?.duration || input.duration || 5}s</div>
+                    <div className="text-[10px] text-muted-foreground">
+                      Duration
+                    </div>
+                    <div className="font-semibold">
+                      {output?.duration || input.duration || 5}s
+                    </div>
                   </div>
                 </div>
               </div>
@@ -162,7 +185,11 @@ export function VideoGenerationSection({ tool }: VideoGenerationSectionProps) {
                   onClick={handleCopyPrompt}
                   className="flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border bg-background hover:bg-muted text-foreground transition-colors"
                 >
-                  {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                  {copied ? (
+                    <Check className="w-3.5 h-3.5" />
+                  ) : (
+                    <Copy className="w-3.5 h-3.5" />
+                  )}
                   Copy Prompt
                 </button>
                 <button

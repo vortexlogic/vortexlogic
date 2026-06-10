@@ -1,7 +1,11 @@
 import { z } from 'zod'
 
 export const generateVideoSchema = z.object({
-  prompt: z.string().describe('Detailed prompt describing the scene and motion for the video to generate'),
+  prompt: z
+    .string()
+    .describe(
+      'Detailed prompt describing the scene and motion for the video to generate'
+    ),
   aspectRatio: z
     .enum(['16:9', '9:16', '1:1', '4:3'])
     .optional()
@@ -15,7 +19,9 @@ export const generateVideoSchema = z.object({
   style: z
     .string()
     .optional()
-    .describe('Artistic style or style preset (e.g. cinematic, anime, realistic, cyberpunk, 3d-render)')
+    .describe(
+      'Artistic style or style preset (e.g. cinematic, anime, realistic, cyberpunk, 3d-render)'
+    )
 })
 
 export type GenerateVideoInput = z.infer<typeof generateVideoSchema>

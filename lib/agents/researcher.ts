@@ -104,14 +104,18 @@ export function createResearcher({
     // Configure based on search mode
     switch (searchMode) {
       case 'image':
-        console.log('[Researcher] Image mode: maxSteps=5, tools=[generateImage]')
+        console.log(
+          '[Researcher] Image mode: maxSteps=5, tools=[generateImage]'
+        )
         systemPrompt = `${getImageModePrompt()}\n\nUser's selected generation settings:\n- Aspect Ratio: ${aspectRatio || '1:1'}\n- Style Preset: ${stylePreset || 'cinematic'}\n\nYou MUST use these exact settings when calling the generateImage tool.`
         activeToolsList = ['generateImage']
         maxSteps = 5
         break
 
       case 'video':
-        console.log('[Researcher] Video mode: maxSteps=5, tools=[generateVideo]')
+        console.log(
+          '[Researcher] Video mode: maxSteps=5, tools=[generateVideo]'
+        )
         systemPrompt = `${getVideoModePrompt()}\n\nUser's selected generation settings:\n- Aspect Ratio: ${aspectRatio || '16:9'}\n- Style Preset: ${stylePreset || 'cinematic'}\n- Duration: ${duration || '5'} seconds\n\nYou MUST use these exact settings when calling the generateVideo tool.`
         activeToolsList = ['generateVideo']
         maxSteps = 5
@@ -130,7 +134,13 @@ export function createResearcher({
       case 'adaptive':
       default:
         systemPrompt = getAdaptiveModePrompt()
-        activeToolsList = ['search', 'fetch', 'todoWrite', 'generateImage', 'generateVideo']
+        activeToolsList = [
+          'search',
+          'fetch',
+          'todoWrite',
+          'generateImage',
+          'generateVideo'
+        ]
         console.log(
           `[Researcher] Adaptive mode: maxSteps=50, tools=[${activeToolsList.join(', ')}]`
         )

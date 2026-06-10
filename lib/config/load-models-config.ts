@@ -8,6 +8,8 @@ export interface ModelsConfig {
   models: {
     quick: Model
     adaptive: Model
+    image?: Model
+    video?: Model
   }
 }
 

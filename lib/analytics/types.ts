@@ -2,6 +2,8 @@
  * Analytics module types
  */
 
+import { SearchMode } from '../types/search'
+
 /** Length bucket of the user query. Avoids sending the raw text. */
 export type QueryLenBucket = '0-20' | '21-50' | '51-120' | '120+'
 
@@ -24,7 +26,7 @@ export interface QueryShape {
  */
 export interface ChatEventData {
   /** Search mode used for the chat */
-  searchMode: 'quick' | 'planning' | 'adaptive'
+  searchMode: SearchMode | 'planning'
   /** Conversation turn number (1-indexed, represents follow-up count) */
   conversationTurn: number
   /** Whether this is a new chat session */

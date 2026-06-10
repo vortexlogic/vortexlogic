@@ -378,4 +378,3 @@ OUTPUT FORMAT (MANDATORY):
 - Outline key technical aspects (aspect ratio, duration, motion) using bullets.
 `
 }
-

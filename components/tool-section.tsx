@@ -6,10 +6,10 @@ import type { ToolPart, UIDataTypes, UIMessage, UITools } from '@/lib/types/ai'
 
 import FetchSection from './fetch-section'
 import { ImageGenerationSection } from './image-generation-section'
-import { VideoGenerationSection } from './video-generation-section'
 import { QuestionConfirmation } from './question-confirmation'
 import { SearchSection } from './search-section'
 import { ToolTodoDisplay } from './tool-todo-display'
+import { VideoGenerationSection } from './video-generation-section'
 
 interface ToolSectionProps {
   tool: ToolPart

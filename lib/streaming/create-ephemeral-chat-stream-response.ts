@@ -1,3 +1,5 @@
+import { cookies } from 'next/headers'
+
 import type { UIMessage } from 'ai'
 import {
   consumeStream,
@@ -7,7 +9,6 @@ import {
 } from 'ai'
 import { randomUUID } from 'crypto'
 import { Langfuse } from 'langfuse'
-import { cookies } from 'next/headers'
 
 import { researcher } from '@/lib/agents/researcher'
 import {

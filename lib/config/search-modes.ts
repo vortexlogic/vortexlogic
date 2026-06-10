@@ -1,6 +1,6 @@
 import {
-  IconSearch as Search,
   IconPhoto as Photo,
+  IconSearch as Search,
   IconVideo as Video
 } from '@tabler/icons-react'
 
@@ -54,4 +54,3 @@ export function getSearchModeConfig(
 ): SearchModeConfig | undefined {
   return SEARCH_MODE_CONFIGS.find(config => config.value === mode)
 }
-

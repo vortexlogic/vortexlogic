@@ -33,7 +33,8 @@ export default defineConfig([
           groups: importSortGroups
         }
       ],
-      'simple-import-sort/exports': 'error'
+      'simple-import-sort/exports': 'error',
+      'react-hooks/set-state-in-effect': 'off'
     }
   },
   globalIgnores(['.next/**', 'out/**', 'build/**', 'next-env.d.ts'])

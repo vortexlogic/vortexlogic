@@ -1,4 +1,5 @@
 import { tool } from 'ai'
+
 import { generateImageSchema } from '@/lib/schema/generateImage'
 import { logToolPayload } from '@/lib/utils/usage-logging'
 
@@ -39,19 +40,29 @@ export const generateImageTool = tool({
       // 1. Check Fal.ai integration
       if (process.env.FAL_KEY) {
         provider = 'fal'
-        const response = await fetch('https://queue.fal.run/fal-ai/flux/schnell', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Key ${process.env.FAL_KEY}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            prompt: fullPrompt,
-            image_size: aspectRatio === '1:1' ? 'square' : aspectRatio === '16:9' ? 'landscape_16_9' : aspectRatio === '9:16' ? 'portrait_16_9' : 'square',
-            num_inference_steps: 4,
-            sync_mode: true
-          })
-        })
+        const response = await fetch(
+          'https://queue.fal.run/fal-ai/flux/schnell',
+          {
+            method: 'POST',
+            headers: {
+              Authorization: `Key ${process.env.FAL_KEY}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              prompt: fullPrompt,
+              image_size:
+                aspectRatio === '1:1'
+                  ? 'square'
+                  : aspectRatio === '16:9'
+                    ? 'landscape_16_9'
+                    : aspectRatio === '9:16'
+                      ? 'portrait_16_9'
+                      : 'square',
+              num_inference_steps: 4,
+              sync_mode: true
+            })
+          }
+        )
 
         if (response.ok) {
           const data = await response.json()
@@ -64,45 +75,67 @@ export const generateImageTool = tool({
       // 2. Check Replicate integration if Fal.ai is not available
       if (!url && process.env.REPLICATE_API_TOKEN) {
         provider = 'replicate'
-        const response = await fetch('https://api.replicate.com/v1/predictions', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Token ${process.env.REPLICATE_API_TOKEN}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            version: '557a511c77c61774b78631bfa2b32252a106f4776104bc172153f938d99c450c', // Flux Schnell
-            input: {
-              prompt: fullPrompt,
-              aspect_ratio: aspectRatio === '1:1' ? '1:1' : aspectRatio === '16:9' ? '16:9' : aspectRatio === '9:16' ? '9:16' : '1:1',
-              go_fast: true,
-              megapixels: '1',
-              num_outputs: 1,
-              output_format: 'webp',
-              output_quality: 80
-            }
-          })
-        })
+        const response = await fetch(
+          'https://api.replicate.com/v1/predictions',
+          {
+            method: 'POST',
+            headers: {
+              Authorization: `Token ${process.env.REPLICATE_API_TOKEN}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              version:
+                '557a511c77c61774b78631bfa2b32252a106f4776104bc172153f938d99c450c', // Flux Schnell
+              input: {
+                prompt: fullPrompt,
+                aspect_ratio:
+                  aspectRatio === '1:1'
+                    ? '1:1'
+                    : aspectRatio === '16:9'
+                      ? '16:9'
+                      : aspectRatio === '9:16'
+                        ? '9:16'
+                        : '1:1',
+                go_fast: true,
+                megapixels: '1',
+                num_outputs: 1,
+                output_format: 'webp',
+                output_quality: 80
+              }
+            })
+          }
+        )
 
         if (response.ok) {
           let prediction = await response.json()
           // Poll for completion since Replicate is async
           const maxPolls = 30
           let polls = 0
-          while (prediction.status !== 'succeeded' && prediction.status !== 'failed' && polls < maxPolls) {
+          while (
+            prediction.status !== 'succeeded' &&
+            prediction.status !== 'failed' &&
+            polls < maxPolls
+          ) {
             await new Promise(resolve => setTimeout(resolve, 500))
-            const pollRes = await fetch(`https://api.replicate.com/v1/predictions/${prediction.id}`, {
-              headers: {
-                'Authorization': `Token ${process.env.REPLICATE_API_TOKEN}`
+            const pollRes = await fetch(
+              `https://api.replicate.com/v1/predictions/${prediction.id}`,
+              {
+                headers: {
+                  Authorization: `Token ${process.env.REPLICATE_API_TOKEN}`
+                }
               }
-            })
+            )
             if (pollRes.ok) {
               prediction = await pollRes.json()
             }
             polls++
           }
 
-          if (prediction.status === 'succeeded' && prediction.output && prediction.output.length > 0) {
+          if (
+            prediction.status === 'succeeded' &&
+            prediction.output &&
+            prediction.output.length > 0
+          ) {
             url = prediction.output[0]
           }
         }
