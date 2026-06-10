@@ -75,7 +75,7 @@ export default async function RootLayout({
         >
           <PostHogProvider userId={user?.id ?? null}>
             <UserProvider hasUser={!!userId}>
-              <AppLayoutClient userId={userId} user={user}>
+              <AppLayoutClient userId={userId ?? null} user={user}>
                 {children}
               </AppLayoutClient>
             </UserProvider>
